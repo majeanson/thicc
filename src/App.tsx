@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { tickers } from './assets/tickers_array';
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [thiccifiedValue, setThiccifiedValue] = useState('');
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: any) => {
     setInputValue(event.target.value);
   };
 
