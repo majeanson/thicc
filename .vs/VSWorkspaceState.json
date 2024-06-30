@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\public",
+    "\\src",
+    "\\src\\assets"
   ],
-  "SelectedNode": "\\C:\\Users\\marc_\\Source\\Repos\\thicc",
   "PreviewInSolutionExplorer": false
 }
