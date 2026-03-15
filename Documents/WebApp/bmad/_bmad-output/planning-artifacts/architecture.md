@@ -64,10 +64,10 @@ Select during CLI prompts:
 
 **Monorepo Structure (Turborepo):**
 
-- `apps/web` — Next.js 15 App Router (React Server Components)
+- `apps/nextjs` — Next.js 15 App Router (React Server Components) ⚠️ *Yuki-Stack creates `apps/nextjs`, not `apps/web`*
 - `packages/api` — tRPC v11 router (logical backend separation)
 - `packages/db` — Drizzle ORM schema + migrations
-- `packages/ui` — Shared component library (shadcn/ui + Tailwind CSS v4)
+- `packages/ui` — Shared component library (@base-ui/react + Tailwind CSS v4) ⚠️ *Uses `@base-ui/react`, not `shadcn/ui`*
 - `packages/validators` — Zod schemas shared between FE and BE
 
 **API Layer:**
@@ -96,7 +96,7 @@ Select during CLI prompts:
 
 **Deployment Architecture:**
 
-- `apps/web` → Vercel (native Next.js deployment)
+- `apps/nextjs` → Vercel (native Next.js deployment)
 - `packages/api` tRPC handlers served via Next.js API routes — no separate server needed
 - PostgreSQL → Neon, Supabase, or Railway (managed PostgreSQL with JSONB support)
 
@@ -298,9 +298,9 @@ Post-MVP: populate from session token. No procedure signature changes needed.
 - Keyboard navigation built in (meets NFR19)
 - Purpose-built tree component, not a graph library
 
-**Styling:** Tailwind CSS v4 + shadcn/ui component library
+**Styling:** Tailwind CSS v4 + @base-ui/react component library ⚠️ *`@base-ui/react` (Base UI from MUI) is installed, not `shadcn/ui`. Do NOT import from `@shadcn/ui`.*
 **Accessibility baseline:** WCAG 2.1 Level A — keyboard navigability via
-react-arborist + shadcn/ui accessible primitives (meets NFR19, NFR20)
+react-arborist + @base-ui/react accessible primitives (meets NFR19, NFR20)
 
 ---
 
@@ -394,15 +394,19 @@ error handling placement, and loading state management.
 
 **File Naming:**
 
-- React components: PascalCase matching the component — `FeatureDetail.tsx`, `WizardStep.tsx`, `JsonEditor.tsx`
-- Hooks: camelCase — `useFeature.ts`, `useFreezeFeature.ts`, `useTreeNavigation.ts`
-- Zustand stores: PascalCase — `WizardStore.ts`, `TreeStore.ts`
+⚠️ **ALL files must use kebab-case** — `unicorn/filename-case` in oxlint enforces this for every file without exception. PascalCase filenames will cause lint failures.
+
+- React components: kebab-case — `feature-detail.tsx`, `wizard-step.tsx`, `json-editor.tsx`
+- Hooks: kebab-case — `use-feature.ts`, `use-freeze-feature.ts`
+- Zustand stores: kebab-case — `wizard-store.ts`, `tree-store.ts`, `ui-store.ts`
 - Non-component files: kebab-case — `trpc.ts`, `utils.ts`, `event-types.ts`
 - Next.js conventions unchanged — `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`
-- Test files: co-located, `.test.ts` / `.test.tsx` suffix — `FeatureDetail.test.tsx`
+- Test files: co-located, `.test.ts` / `.test.tsx` suffix — `feature-detail.test.tsx`
 
-✅ `FeatureDetail.tsx`, `useFreezeFeature.ts`, `WizardStore.ts`
-❌ `feature-detail.tsx`, `use-freeze-feature.ts`, `wizard-store.ts`
+✅ `feature-detail.tsx`, `wizard-step.tsx`, `wizard-store.ts`
+❌ `FeatureDetail.tsx`, `WizardStep.tsx`, `WizardStore.ts`
+
+Note: The exported React component name inside the file is still PascalCase (`export function FeatureDetail`). Only the *filename* must be kebab-case.
 
 **JSONB Feature Content Field Naming:**
 
@@ -430,37 +434,40 @@ error handling placement, and loading state management.
 - `packages/api` — tRPC router, procedures, context. Imports from db + validators only.
 - `packages/validators` — Zod schemas, TypeScript types, event_type enum. No imports
   from other internal packages.
-- `packages/ui` — shadcn/ui components, Tailwind config. No business logic.
-- `apps/web` — Next.js pages, RSC, Client Components, Zustand stores. Imports from
+- `packages/ui` — @base-ui/react components, Tailwind config. No business logic.
+- `apps/nextjs` — Next.js pages, RSC, Client Components, Zustand stores. Imports from
   all packages but never imports across apps.
 
-**Within apps/web — Feature-Based Organization:**
+**Within apps/nextjs — Feature-Based Organization:**
 
 ```
-apps/web/
+apps/nextjs/
   app/
     (features)/
       features/          ← feature list, tree, search pages
       wizard/            ← wizard flow pages
-      [feature-id]/      ← feature detail pages
+      [id]/              ← feature detail pages
   components/
-    features/            ← FeatureCard, FeatureTree, FeatureDetail
-    wizard/              ← WizardStep, WizardProgress, WizardNav
-    json-editor/         ← JsonEditor (CodeMirror wrapper)
-    ui/                  ← re-exports from packages/ui
+    features/            ← feature-card.tsx, feature-tree.tsx, feature-detail-view.tsx
+    wizard/              ← wizard-step.tsx, wizard-progress.tsx, wizard-nav.tsx
+    layout/              ← app-shell.tsx, header.tsx, sidebar.tsx, mobile-nav.tsx
+    toast/               ← toast-item.tsx, toast-container.tsx
+    theme/               ← theme-applier.tsx
   stores/
-    WizardStore.ts
-    TreeStore.ts
+    ui-store.ts          ← ⚠️ kebab-case enforced by oxlint unicorn/filename-case
+    wizard-store.ts
+    tree-store.ts
+    theme-store.ts
+    toast-store.ts
   lib/
     trpc.ts              ← tRPC client setup
-    utils.ts             ← shared utilities
 ```
 
 **Test Co-location Rule:**
 
-- Tests live next to the file they test — `FeatureDetail.tsx` + `FeatureDetail.test.tsx`
+- Tests live next to the file they test — `feature-detail.tsx` + `feature-detail.test.tsx`
 - Integration tests for tRPC procedures: `packages/api/src/routers/features.test.ts`
-- E2E tests: `apps/web/e2e/` directory (Playwright)
+- E2E tests: `apps/nextjs/e2e/` directory (Playwright)
 - No `__tests__` directories — co-location only
 
 ---
@@ -516,7 +523,7 @@ throw new TRPCError({
 
 **Zustand Store Pattern:**
 
-- One store per domain — `WizardStore.ts`, `TreeStore.ts`
+- One store per domain — `wizard-store.ts`, `tree-store.ts` (kebab-case filenames)
 - Stores export: `useWizardStore` hook + `WizardState` type
 - Use `subscribeWithSelector` middleware for performance
 - Use `devtools` middleware in development
@@ -549,7 +556,7 @@ await db.insert(featureEvents).values({
 - Use TanStack Query's built-in state — `isPending`, `isLoading`, `isFetching`
 - No custom loading state in Zustand for server data
 - Use Next.js `loading.tsx` for RSC page-level loading
-- Use shadcn/ui `Skeleton` for component-level loading UI
+- Use animate-pulse `<div>` shimmer skeletons for component-level loading UI (no shadcn/ui — project uses @base-ui/react)
 - Never block the entire page for a single component load
 
 **Error Boundaries:**
