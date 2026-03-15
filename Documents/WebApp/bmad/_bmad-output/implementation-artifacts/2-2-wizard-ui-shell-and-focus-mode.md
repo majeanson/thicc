@@ -1,6 +1,6 @@
 # Story 2.2: Wizard UI Shell & Focus Mode
 
-Status: review
+Status: done
 
 ## Story
 
@@ -573,6 +573,12 @@ claude-sonnet-4-6
 3. RSC prefetch pattern: `trpc.features.getFeature.prefetch()` type error — used `getQueryClient().prefetchQuery(trpc.features.getFeature.queryOptions({ id }))` instead.
 4. `WizardShell.test.tsx` omitted: no vitest installed; `unicorn/no-empty-file` blocks placeholder files. Wire up when vitest is added.
 
+### File List (Code Review Additions)
+
+- `life-as-code/apps/nextjs/components/wizard/wizard-nav.tsx` — MODIFIED (added `onMarkComplete` prop + "Mark stage complete" button for AC#6)
+- `life-as-code/apps/nextjs/components/wizard/wizard-shell.tsx` — MODIFIED (added `stageValidationError` state, `handleMarkComplete`, validation display, tags type guard, `setSaveState('saved')` on stage change)
+- `life-as-code/apps/nextjs/app/(features)/features/new/page.tsx` — MODIFIED (added explicit `isPending` guard)
+
 ### File List
 
 - `life-as-code/apps/nextjs/stores/wizard-store.ts` — CREATED
@@ -593,3 +599,8 @@ claude-sonnet-4-6
 - `life-as-code/apps/nextjs/components/wizard/steps/support-step.tsx` — CREATED
 - `life-as-code/apps/nextjs/components/layout/sidebar.tsx` — MODIFIED (added New Feature link)
 - `life-as-code/packages/ui/src/index.ts` — MODIFIED (exported SaveIndicatorState type)
+
+## Change Log
+
+- 2026-03-14: Story implemented by claude-sonnet-4-6 — all tasks complete, status → review
+- 2026-03-14: Code review by claude-sonnet-4-6 — fixed AC#6 (Mark stage complete button + validation); fixed saveState reset on stage change; fixed tags type guard; fixed isPending in new/page.tsx; status → done

@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-14
-last_updated: 2026-03-14 # story 2-2 → review
+last_updated: 2026-03-15 # epic 4 complete — all stories done, code review passed
 project: bmad
 project_key: NOKEY
 tracking_system: file-system
@@ -53,28 +53,28 @@ development_status:
 
   # Epic 2: Feature Creation & Lifecycle Management via Wizard
   epic-2: in-progress
-  2-1-feature-crud-trpc-procedures: review
-  2-2-wizard-ui-shell-and-focus-mode: review
-  2-3-fast-mode-wizard-and-progressive-completion: backlog
-  2-4-decision-log-entries-and-tags: backlog
-  2-5-feature-list-view-and-featurecard-component: backlog
+  2-1-feature-crud-trpc-procedures: done
+  2-2-wizard-ui-shell-and-focus-mode: done
+  2-3-fast-mode-wizard-and-progressive-completion: done
+  2-4-decision-log-entries-and-tags: done
+  2-5-feature-list-view-and-featurecard-component: done
   epic-2-retrospective: optional
 
   # Epic 3: Feature Discovery — Search, Tree & Provenance
-  epic-3: backlog
-  3-1-search-trpc-procedures: backlog
-  3-2-global-search-ui-and-url-synced-filters: backlog
-  3-3-feature-tree-view: backlog
-  3-4-feature-detail-view-and-provenance-chain: backlog
-  3-5-home-overview-screen: backlog
-  epic-3-retrospective: optional
+  epic-3: done
+  3-1-search-trpc-procedures: done
+  3-2-global-search-ui-and-url-synced-filters: done
+  3-3-feature-tree-view: done
+  3-4-feature-detail-view-and-provenance-chain: done
+  3-5-home-overview-screen: done
+  epic-3-retrospective: optiona
 
   # Epic 4: Feature Immutability & Lineage
-  epic-4: backlog
-  4-1-freeze-feature-trpc-procedure: backlog
-  4-2-spawn-child-feature-trpc-procedure: backlog
-  4-3-freeze-and-spawn-ui: backlog
-  4-4-feature-lineage-view: backlog
+  epic-4: done
+  4-1-freeze-feature-trpc-procedure: done
+  4-2-spawn-child-feature-trpc-procedure: done
+  4-3-freeze-and-spawn-ui: done
+  4-4-feature-lineage-view: done
   epic-4-retrospective: optional
 
   # Epic 5: Raw JSON Access & Dual-Mode Editing
